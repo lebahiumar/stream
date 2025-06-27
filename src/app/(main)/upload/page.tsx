@@ -169,8 +169,8 @@ export default function UploadPage() {
   const isUploading = status === 'uploading' || status === 'getting_url';
 
   return (
-    <div className="flex justify-center items-start pt-8">
-      <Card className="w-full max-w-2xl">
+    <div className="flex justify-center items-start pt-4 sm:pt-8 px-2 w-full">
+      <Card className="w-full max-w-lg sm:max-w-2xl">
         <CardHeader>
           <CardTitle>Upload Video</CardTitle>
           <CardDescription>
@@ -180,10 +180,9 @@ export default function UploadPage() {
         <FormProvider {...form}>
             <form onSubmit={form.handleSubmit(handleUpload)}>
                 <CardContent className="space-y-6">
-                    <div className="flex flex-col items-center justify-center gap-2 border-2 border-dashed border-muted p-8 rounded-lg min-h-[200px]">
+                    <div className="flex flex-col items-center justify-center gap-2 border-2 border-dashed border-muted p-4 sm:p-8 rounded-lg min-h-[150px] sm:min-h-[200px] w-full">
                         {renderFileArea()}
                     </div>
-
                     <FormField
                         control={form.control}
                         name="title"
@@ -191,13 +190,12 @@ export default function UploadPage() {
                             <FormItem>
                                 <FormLabel>Title</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="e.g. My Awesome Video" {...field} disabled={isUploading} />
+                                    <Input placeholder="e.g. My Awesome Video" {...field} disabled={isUploading} className="w-full" />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
                         )}
                     />
-
                     <FormField
                         control={form.control}
                         name="category"
@@ -206,9 +204,7 @@ export default function UploadPage() {
                                 <FormLabel>Category</FormLabel>
                                 <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isUploading}>
                                 <FormControl>
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Select a category" />
-                                    </SelectTrigger>
+                                    <SelectTrigger className="w-full" />
                                 </FormControl>
                                 <SelectContent>
                                     {categories.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
@@ -219,18 +215,19 @@ export default function UploadPage() {
                         )}
                     />
                 </CardContent>
-                <CardFooter className="flex justify-end gap-2">
+                <CardFooter className="flex flex-col sm:flex-row justify-end gap-2 w-full">
                     {isUploading ? (
-                        <Button variant="destructive" type="button" onClick={handleCancelOrReset}>Cancel</Button>
+                        <Button variant="destructive" type="button" onClick={handleCancelOrReset} className="w-full sm:w-auto">Cancel</Button>
                     ) : null}
                     {(status === 'success' || status === 'error') ? (
-                        <Button variant="outline" type="button" onClick={handleCancelOrReset}>
-                            {status === 'success' ? 'Upload Another' : 'Try Again' }
+                        <Button variant="outline" type="button" onClick={handleCancelOrReset} className="w-full sm:w-auto">
+                        Reset
                         </Button>
                     ) : null}
-
-                    <Button type="submit" disabled={isUploading || status === 'success'}>
-                        {isUploading ? 'Uploading...' : 'Upload Video'}
+                    <Button type="submit" disabled={isUploading} className="w-full sm:w-auto">
+                        {isUploading ? (
+                            <span className="flex items-center gap-2"><Loader className="animate-spin h-4 w-4" /> Uploading...</span>
+                        ) : 'Upload'}
                     </Button>
                 </CardFooter>
             </form>

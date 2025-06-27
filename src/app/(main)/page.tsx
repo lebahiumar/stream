@@ -22,16 +22,15 @@ export default async function HomePage() {
   const categories = await getCategories();
 
   return (
-    <div className="space-y-12">
+    <div className="space-y-12 px-2 sm:px-4 md:px-8 py-4">
       <AiRecommendations />
-      
       {categories.map((category) => (
         <div key={category.name} className="space-y-4">
-          <h2 className="text-2xl font-bold">{category.name}</h2>
+          <h2 className="text-2xl font-bold px-2 sm:px-0">{category.name}</h2>
           <Carousel opts={{ align: "start" }}>
             <CarouselContent>
               {category.videos.map((video) => (
-                <CarouselItem key={video.id} className="md:basis-1/2 lg:basis-1/3 xl:basis-1/4">
+                <CarouselItem key={video.id} className="basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4">
                   <VideoCard video={video} />
                 </CarouselItem>
               ))}

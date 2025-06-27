@@ -128,16 +128,16 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
         </SidebarFooter>
       </Sidebar>
       <SidebarInset>
-        <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center gap-4 border-b bg-background/80 px-4 backdrop-blur-sm md:px-6">
-          <div className="flex-1">
-            <form onSubmit={handleSearch}>
+        <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2 border-b bg-background/80 px-2 sm:px-4 md:px-6 backdrop-blur-sm">
+          <div className="flex-1 min-w-0">
+            <form onSubmit={handleSearch} className="w-full">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                <Input name="search" defaultValue={searchParams.get('q') ?? ''} placeholder="Search for videos..." className="w-full rounded-full bg-muted pl-10 md:w-[300px] lg:w-[400px]" />
+                <Input name="search" defaultValue={searchParams.get('q') ?? ''} placeholder="Search for videos..." className="w-full rounded-full bg-muted pl-10 text-sm md:w-[300px] lg:w-[400px]" />
               </div>
             </form>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-4">
             <Button variant="ghost" size="icon" className="rounded-full">
               <Bell className="h-5 w-5" />
               <span className="sr-only">Notifications</span>
@@ -148,7 +148,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
             </Avatar>
           </div>
         </header>
-        <main className="flex-1 p-4 md:p-6 lg:p-8">
+        <main className="flex-1 p-2 sm:p-4 md:p-6 lg:p-8 w-full max-w-full">
           <Suspense>
             {children}
           </Suspense>
