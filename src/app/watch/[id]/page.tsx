@@ -5,10 +5,18 @@ import { Button } from '@/components/ui/button';
 import { ThumbsUp, ThumbsDown, Share2, ListPlus } from 'lucide-react';
 import { VideoCard } from '@/components/video-card';
 import { Separator } from '@/components/ui/separator';
-import { getVideo, getVideos } from '@/app/actions/mux';
+import { getVideo, getVideos, getAssetIdByPlaybackId } from '@/app/actions/mux';
 
 export default async function WatchPage({ params }: { params: { id: string } }) {
-  const video = await getVideo(params.id);
+  let video = await getVideo(params.id);
+
+  // If video is not found, it might be a playback ID
+  if (!video) {
+    const assetId = await getAssetIdByPlaybackId(params.id);
+    if (assetId) {
+      video = await getVideo(assetId);
+    }
+  }
 
   if (!video) {
     notFound();

@@ -3,19 +3,7 @@ import { headers } from 'next/headers';
 import { NextResponse, type NextRequest } from 'next/server';
 import Mux from '@mux/mux-node';
 
-const mux = (process.env.MUX_TOKEN_ID && process.env.MUX_TOKEN_SECRET) 
-  ? new Mux({
-      tokenId: process.env.MUX_TOKEN_ID,
-      tokenSecret: process.env.MUX_TOKEN_SECRET,
-    })
-  : null;
-
 export async function POST(req: NextRequest) {
-  if (!mux) {
-    console.error('Mux not configured, cannot process webhook.');
-    return NextResponse.json({ message: 'Mux not configured' }, { status: 500 });
-  }
-
   const signingSecret = process.env.MUX_WEBHOOK_SECRET;
   if (!signingSecret) {
     console.error('MUX_WEBHOOK_SECRET is not set. Cannot verify webhook.');
@@ -31,12 +19,14 @@ export async function POST(req: NextRequest) {
   const body = await req.text();
 
   try {
-    const event = Mux.webhooks.verifyHeader(body, signature, signingSecret);
+    // The Mux SDK's verifySignature method returns the event, or throws an error if verification fails.
+    const event = Mux.Webhooks.verifySignature(body, signature, signingSecret);
 
     if (event.type === 'video.asset.ready') {
       const assetId = event.data.id;
       console.log(`Mux Webhook: Asset ${assetId} is ready. Revalidating cache.`);
       
+      // Revalidate the entire site to reflect the new video everywhere
       revalidatePath('/', 'layout');
     } else {
       console.log(`Mux Webhook: Received event '${event.type}', no action taken.`);
@@ -44,7 +34,8 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ received: true });
 
-  } catch (err) {
+  } catch (err)
+ {
     console.error('Webhook signature verification failed.', err);
     return NextResponse.json({ message: 'Signature verification failed' }, { status: 400 });
   }

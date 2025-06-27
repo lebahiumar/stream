@@ -35,14 +35,12 @@ export function CategorySidebarMenu() {
         <SidebarMenu>
           {displayCategories.map((item) => (
             <SidebarMenuItem key={item}>
-              <Link href={`/category/${item.toLowerCase()}`} legacyBehavior passHref>
-                <SidebarMenuButton asChild isActive={pathname.startsWith(`/category/${item.toLowerCase()}`)} tooltip={item}>
-                  <a>
-                    <Film />
-                    <span>{item}</span>
-                  </a>
-                </SidebarMenuButton>
-              </Link>
+              <SidebarMenuButton asChild isActive={pathname.startsWith(`/category/${item.toLowerCase()}`)} tooltip={item}>
+                <Link href={`/category/${item.toLowerCase()}`}>
+                  <Film />
+                  <span>{item}</span>
+                </Link>
+              </SidebarMenuButton>
             </SidebarMenuItem>
           ))}
         </SidebarMenu>
