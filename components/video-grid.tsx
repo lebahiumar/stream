@@ -21,7 +21,16 @@ export function VideoGrid() {
       try {
         const response = await fetch("/api/videos")
         const data = await response.json()
-        setVideos(data.data || [])
+        console.log("Video grid - Raw data:", data)
+
+        // Add status field if missing (for backward compatibility)
+        const videosWithStatus = (data.data || []).map((video: any) => ({
+          ...video,
+          status: video.status || "ready", // Assume ready if status is missing
+        }))
+
+        console.log("Video grid - Processed videos:", videosWithStatus)
+        setVideos(videosWithStatus)
       } catch (error) {
         console.error("Error fetching videos:", error)
       } finally {

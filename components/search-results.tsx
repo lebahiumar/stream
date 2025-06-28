@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { VideoCard } from "./video-card"
+import { MuxVideoCard } from "./mux-video-card"
 
 interface SearchResultsProps {
   query: string
@@ -13,6 +13,7 @@ interface Video {
   duration?: number
   created_at: string
   passthrough?: string
+  status: string
 }
 
 export function SearchResults({ query }: SearchResultsProps) {
@@ -27,13 +28,23 @@ export function SearchResults({ query }: SearchResultsProps) {
         const response = await fetch("/api/videos")
         const data = await response.json()
 
-        const filteredVideos = (data.data || []).filter((video: Video) => {
+        const videosWithStatus = (data.data || []).map((video: any) => ({
+          ...video,
+          status: video.status || "ready",
+        }))
+
+        const filteredVideos = videosWithStatus.filter((video: Video) => {
           if (!video.passthrough) return false
           try {
             const metadata = JSON.parse(video.passthrough)
+            const title = metadata.title || metadata.video_title || ""
+            const description = metadata.description || metadata.video_description || ""
+            const channel = metadata.channel || metadata.uploader || ""
+
             return (
-              metadata.title?.toLowerCase().includes(query.toLowerCase()) ||
-              metadata.description?.toLowerCase().includes(query.toLowerCase())
+              title.toLowerCase().includes(query.toLowerCase()) ||
+              description.toLowerCase().includes(query.toLowerCase()) ||
+              channel.toLowerCase().includes(query.toLowerCase())
             )
           } catch {
             return false
@@ -82,7 +93,7 @@ export function SearchResults({ query }: SearchResultsProps) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
       {videos.map((video) => (
-        <VideoCard key={video.id} video={video} />
+        <MuxVideoCard key={video.id} video={video} />
       ))}
     </div>
   )
