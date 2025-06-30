@@ -74,21 +74,11 @@ export function VideoDetails({ videoId }: VideoDetailsProps) {
         </div>
 
         <div className="flex items-center space-x-2">
-          <Button variant="outline" size="sm">
-            <ThumbsUp className="w-4 h-4 mr-2" />
-            Like
+          <Button variant="outline" size="icon">
+            <Share className="w-4 h-4" />
           </Button>
-          <Button variant="outline" size="sm">
-            <ThumbsDown className="w-4 h-4 mr-2" />
-            Dislike
-          </Button>
-          <Button variant="outline" size="sm">
-            <Share className="w-4 h-4 mr-2" />
-            Share
-          </Button>
-          <Button variant="outline" size="sm">
-            <Download className="w-4 h-4 mr-2" />
-            Download
+          <Button variant="outline" size="icon">
+            <Download className="w-4 h-4" />
           </Button>
         </div>
       </div>

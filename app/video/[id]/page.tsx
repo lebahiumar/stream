@@ -3,7 +3,6 @@ import { VideoPlayer } from "@/components/video-player"
 import { VideoDetails } from "@/components/video-details"
 import { VideoSidebar } from "@/components/video-sidebar"
 import { Header } from "@/components/header"
-import { Comments } from "@/components/comments"
 
 interface VideoPageProps {
   params: {
@@ -23,9 +22,6 @@ export default function VideoPage({ params }: VideoPageProps) {
             </Suspense>
             <Suspense fallback={<div>Loading video details...</div>}>
               <VideoDetails videoId={params.id} />
-            </Suspense>
-            <Suspense fallback={<div>Loading comments...</div>}>
-              <Comments videoId={params.id} />
             </Suspense>
           </div>
           <div className="lg:col-span-1">
